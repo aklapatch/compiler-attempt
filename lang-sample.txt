@@ -1,0 +1,115 @@
+(def var-name -32)
+# comment
+## doc comment
+#* multi
+    line 
+    comment *#
+##* multi
+    line
+    doc comment 
+    I may remove multi line comments eventually *#
+
+# typing an empty variable 
+(def number::s64)
+
+(import package1 package2)
+package2:>fn_from_package2
+# now you don't need to use the prefix package1 before using a function 
+(using package1)
+
+# pack-name is an empty package
+(package pack-name)
+
+# variables 
+(def var-name -32)
+# sets var-name to 52
+52 >>var-name
+# puts 52 onto the stack
+<<var-name
+
+(def words "line of text")
+(def char-example 'c')
+
+# lambda
+(def minus-one { 1 - }) 
+
+(fn funcName(arg::s32 arg2::s32 | retarg::s32 retarg2::s32) 
+    # function body here 
+    [ 1 2 3 4 ] print 
+    { 0 print })
+
+# arg should still be around when the function is done
+# arg2 will be dropped from the stack while arg remains.
+(fn func(arg::s32 arg2::s32 | arg retarg::s32) 
+    # function body here 
+    )
+
+# generics
+(fn retType(type_arg::comptime::type | out_arg::type)
+# this anonymous struct is getting put on the stack to be used as a return value
+    <<(struct member1::type_arg member2::u32)
+        )
+(struct struct_name 
+    member1::f32 member2::f64
+    member3::bool)
+# using structs 
+struct_name new # empty struct 
+# set struct values
+-0.9 >>struct_name.member1
+0.321 >>struct_name.member2
+false >>struct_name.member3
+
+# struct variables
+(def struct-var struct_name[ 
+    0.5 member1 
+    0.42 member2 
+    true member3])
+
+#put values on the stack
+<<struct_name.member1
+<<struct_name.member2
+# now -0.9 and 0.321 are on the top of the stack
+
+(union u_name
+    member1::u64 member2::s64
+    member3::f64)
+
+# using unions
+# we can typecheck and make sure that membernames are correct
+u_name new
+52 >>u_name.member1
+72 >>u_name.member2
+
+#put the value onto the top of the stack
+<<u_name.member2 #only member2 is valid
+
+(enum::u8 e_name
+    label1 label2 label3
+    label4 label5)
+#put the value of label1 on the top of the stack
+<<e_name.label1
+
+true { "true" } { "not true" } if print
+3 2 > { " > 2 " } { " !> 2 " } if print
+
+# override enum values
+(enum::u8 e2_name
+    32 label4 
+    6 label5)
+
+<<e2_name.label4
+# 32 is now on the top of the stack
+
+#typing arrays (type is what is in the array)
+[ 3 1 3 2]::s32
+
+[ [3] [2] ]::array::s32
+
+#Typing variables on the stack
+51::comptime::u32
+
+# put an address (pointer) on the stack
+addr::s32 new
+
+# allocate 64 bytes of memory for the pointer
+64 alloc
